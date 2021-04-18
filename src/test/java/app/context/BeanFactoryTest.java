@@ -45,4 +45,12 @@ class BeanFactoryTest {
         Date dateSecond = subj.getOrCreate(Date.class);
         Assertions.assertSame(dateFirst, dateSecond);
     }
+
+    @Test
+    void add() {
+        BeanFactory subj = new BeanFactory();
+        Date dateFirst = subj.add(new Date());
+        Date dateSecond = subj.getOrCreate(Date.class);
+        Assertions.assertSame(dateFirst, dateSecond);
+    }
 }

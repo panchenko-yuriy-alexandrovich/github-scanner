@@ -29,4 +29,10 @@ public class BeanFactory {
         return (T) singleton;
     }
 
+    public <T> T add(T obj) {
+        context.put(obj.getClass().getCanonicalName(), obj);
+
+        return obj;
+    }
+
 }
