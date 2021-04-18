@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-class InjectorTest {
+class BeanFactoryTest {
 
     @Test
     void get_whenObjectIsInsideContext_thenReturnFromContext() {
@@ -20,9 +20,9 @@ class InjectorTest {
         Date dateForTest = new Date();
         Map<String, Object> context = new HashMap<>();
         context.put(dateForTest.getClass().getCanonicalName(), dateForTest);
-        Injector subj = new Injector(context, beanCreator);
+        BeanFactory subj = new BeanFactory(context, beanCreator);
 
-        Date dateFromContext = subj.get(Date.class);
+        Date dateFromContext = subj.getOrCreate(Date.class);
 
         Assertions.assertSame(dateForTest, dateFromContext);
     }
@@ -32,17 +32,17 @@ class InjectorTest {
         BeanCreator beanCreator = Mockito.mock(BeanCreator.class);
         when(beanCreator.createAndGet(any(), any())).thenReturn(new Date());
         Map<String, Object> context = new HashMap<>();
-        Injector subj = new Injector(context, beanCreator);
+        BeanFactory subj = new BeanFactory(context, beanCreator);
 
-        subj.get(Date.class);
+        subj.getOrCreate(Date.class);
         Mockito.verify(beanCreator, times(1)).createAndGet(Date.class, context);
     }
 
     @Test
     void get() {
-        Injector subj = new Injector();
-        Date dateFirst = subj.get(Date.class);
-        Date dateSecond = subj.get(Date.class);
+        BeanFactory subj = new BeanFactory();
+        Date dateFirst = subj.getOrCreate(Date.class);
+        Date dateSecond = subj.getOrCreate(Date.class);
         Assertions.assertSame(dateFirst, dateSecond);
     }
 }
