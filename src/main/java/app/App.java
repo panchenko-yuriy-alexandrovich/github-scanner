@@ -1,4 +1,4 @@
-package org.example.github.scanner;
+package app;
 
 public class App {
 

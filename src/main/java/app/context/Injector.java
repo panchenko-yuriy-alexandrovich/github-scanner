@@ -1,4 +1,4 @@
-package org.example.github.scanner.context;
+package app.context;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package org.example.github.scanner.context;
+package app.context;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
