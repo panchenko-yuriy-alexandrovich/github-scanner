@@ -12,6 +12,7 @@ import java.util.Set;
 
 public class BeanCreator {
 
+    @SuppressWarnings("unchecked")
     public <T> T createAndGet(Class<T> clazz, Map<String, Object> context) {
         return (T) createAndGet(clazz, context, new HashSet<>());
     }
@@ -22,7 +23,7 @@ public class BeanCreator {
                                                                         .findFirst();
 
         return constructorWithoutDependencies.isPresent() ?
-                createWithoutDependencies(constructorWithoutDependencies.get(), context, alreadyFoundBeans) :
+                createWithoutDependencies(constructorWithoutDependencies.get(), context) :
                 createWithDependencies(clazz, context, alreadyFoundBeans);
     }
 
@@ -56,7 +57,7 @@ public class BeanCreator {
         return result;
     }
 
-    private Object createWithoutDependencies(Constructor<?> constructor, Map<String, Object> context, Set<String> alreadyFoundBeans) {
+    private Object createWithoutDependencies(Constructor<?> constructor, Map<String, Object> context) {
         Object creation = createObjectWithoutDependencies(constructor);
         context.put(constructor.getDeclaringClass().getCanonicalName(), creation);
 
@@ -70,7 +71,7 @@ public class BeanCreator {
             throw new CreationBeanLoopException(String.format(CreationBeanLoopException.PATTERN, className));
         }
         alreadyFoundBeans.add(className);
-        List filledConstructorArgs = new ArrayList();
+        List<Object> filledConstructorArgs = new ArrayList<>();
         for (Class<?> dep : constructor.getParameterTypes()) {
             String depName = dep.getCanonicalName();
             Object obj = context.get(depName);

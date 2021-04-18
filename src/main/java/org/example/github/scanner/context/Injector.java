@@ -19,6 +19,7 @@ public class Injector {
         this.beanCreator = beanCreator;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T get(Class<T> clazz) {
         Object singleton = context.get(clazz.getCanonicalName());
         if (singleton == null) {
