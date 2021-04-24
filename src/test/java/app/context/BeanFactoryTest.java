@@ -1,14 +1,16 @@
 package app.context;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -24,7 +26,7 @@ class BeanFactoryTest {
 
         Date dateFromContext = subj.getOrCreate(Date.class);
 
-        Assertions.assertSame(dateForTest, dateFromContext);
+        assertSame(dateForTest, dateFromContext);
     }
 
     @Test
@@ -34,8 +36,11 @@ class BeanFactoryTest {
         Map<String, Object> context = new HashMap<>();
         BeanFactory subj = new BeanFactory(context, beanCreator);
 
-        subj.getOrCreate(Date.class);
-        Mockito.verify(beanCreator, times(1)).createAndGet(Date.class, context);
+        Date createdDate = subj.getOrCreate(Date.class);
+
+        assertNotNull(createdDate);
+
+        verify(beanCreator, times(1)).createAndGet(Date.class, context);
     }
 
     @Test
@@ -43,7 +48,7 @@ class BeanFactoryTest {
         BeanFactory subj = new BeanFactory();
         Date dateFirst = subj.getOrCreate(Date.class);
         Date dateSecond = subj.getOrCreate(Date.class);
-        Assertions.assertSame(dateFirst, dateSecond);
+        assertSame(dateFirst, dateSecond);
     }
 
     @Test
@@ -51,6 +56,6 @@ class BeanFactoryTest {
         BeanFactory subj = new BeanFactory();
         Date dateFirst = subj.add(new Date());
         Date dateSecond = subj.getOrCreate(Date.class);
-        Assertions.assertSame(dateFirst, dateSecond);
+        assertSame(dateFirst, dateSecond);
     }
 }

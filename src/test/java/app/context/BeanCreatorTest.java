@@ -1,5 +1,11 @@
 package app.context;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.HashMap;
@@ -64,14 +70,14 @@ class BeanCreatorTest {
     void createObjectWithoutDependencies_whenNoArgConstructorIsAbsent_thenThrowCreationBeanException() {
         Constructor<?>[] constructors = TestWithDependencies.class.getDeclaredConstructors();
 
-        Throwable throwable = Assertions.assertThrows(BeanCreator.CreationBeanException.class,
+        Throwable throwable = assertThrows(BeanCreator.CreationBeanException.class,
                 () -> subj.createObjectWithoutDependencies(constructors[0]));
 
 
-        Assertions.assertNotNull(throwable);
+        assertNotNull(throwable);
 
         String expectedErrorMessage = String.format(BeanCreator.CreationBeanException.PATTERN, TestWithDependencies.class.getCanonicalName());
-        Assertions.assertEquals(expectedErrorMessage, throwable.getMessage());
+        assertEquals(expectedErrorMessage, throwable.getMessage());
     }
 
     @Test
@@ -80,8 +86,8 @@ class BeanCreatorTest {
 
         Object objectWithoutDependencies = subj.createObjectWithoutDependencies(constructors[0]);
 
-        Assertions.assertNotNull(objectWithoutDependencies);
-        Assertions.assertTrue(objectWithoutDependencies instanceof TestWithNoArgConstructor);
+        assertNotNull(objectWithoutDependencies);
+        assertTrue(objectWithoutDependencies instanceof TestWithNoArgConstructor);
     }
 
 
@@ -90,12 +96,12 @@ class BeanCreatorTest {
         Map<String, Object> context = new HashMap<>();
         TestWithNoArgConstructor createdObject = subj.createAndGet(TestWithNoArgConstructor.class, context);
 
-        Assertions.assertNotNull(createdObject);
+        assertNotNull(createdObject);
         Object saveToContextObject = context.get(TestWithNoArgConstructor.class.getCanonicalName());
 
-        Assertions.assertNotNull(saveToContextObject);
-        Assertions.assertTrue(saveToContextObject instanceof TestWithNoArgConstructor);
-        Assertions.assertSame(saveToContextObject, createdObject);
+        assertNotNull(saveToContextObject);
+        assertTrue(saveToContextObject instanceof TestWithNoArgConstructor);
+        assertSame(saveToContextObject, createdObject);
     }
 
     @Test
@@ -103,8 +109,8 @@ class BeanCreatorTest {
         Map<String, Object> context = new HashMap<>();
         TestWithDependencies createdObject = subj.createAndGet(TestWithDependencies.class, context);
 
-        Assertions.assertNotNull(createdObject);
-        Assertions.assertNotNull(createdObject.getSubj());
+        assertNotNull(createdObject);
+        assertNotNull(createdObject.getSubj());
     }
 
     @Test
@@ -113,9 +119,9 @@ class BeanCreatorTest {
         TestWithNoArgConstructor obj = subj.createAndGet(TestWithNoArgConstructor.class, context);
         TestWithDependencies createdObject = subj.createAndGet(TestWithDependencies.class, context);
 
-        Assertions.assertNotNull(createdObject);
-        Assertions.assertNotNull(createdObject.getSubj());
-        Assertions.assertSame(obj, createdObject.getSubj());
+        assertNotNull(createdObject);
+        assertNotNull(createdObject.getSubj());
+        assertSame(obj, createdObject.getSubj());
     }
 
     @Test
@@ -123,18 +129,18 @@ class BeanCreatorTest {
         Map<String, Object> context = new HashMap<>();
         TestWithSecondLvlDependencies createdObject = subj.createAndGet(TestWithSecondLvlDependencies.class, context);
 
-        Assertions.assertNotNull(createdObject);
-        Assertions.assertNotNull(createdObject.getSubj());
+        assertNotNull(createdObject);
+        assertNotNull(createdObject.getSubj());
     }
 
     @Test
     void createAndGet_whenObjectWithLoopedDependencies_thenThrowException() {
         Map<String, Object> context = new HashMap<>();
-        Throwable exception = Assertions.assertThrows(BeanCreator.CreationBeanLoopException.class,
+        Throwable exception = assertThrows(BeanCreator.CreationBeanLoopException.class,
                 () -> subj.createAndGet(TestWithLoopedDependencies.class, context));
 
         String expectedMsg = String.format(BeanCreator.CreationBeanLoopException.PATTERN, TestWithLoopedDependencies.class.getCanonicalName());
-        Assertions.assertEquals(expectedMsg, exception.getMessage());
+        assertEquals(expectedMsg, exception.getMessage());
     }
 
     @Test
@@ -142,11 +148,11 @@ class BeanCreatorTest {
         Constructor<?>[] constructors = TestWithDependencies.class.getConstructors();
 
 
-        Throwable exception = Assertions.assertThrows(BeanCreator.CreationBeanException.class,
+        Throwable exception = assertThrows(BeanCreator.CreationBeanException.class,
                 () -> subj.createObjectWithDependencies(constructors[0], Collections.singletonList("123")));
 
         String expectedMsg = String.format(BeanCreator.CreationBeanException.PATTERN, TestWithDependencies.class.getCanonicalName());
-        Assertions.assertEquals(expectedMsg, exception.getMessage());
+        assertEquals(expectedMsg, exception.getMessage());
     }
 
 

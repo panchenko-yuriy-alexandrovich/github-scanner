@@ -3,6 +3,8 @@ package app.net;
 import static app.net.GitHubApi.BASE_URI;
 import static app.net.GitHubApi.HttpException.PATTERN;
 import static app.net.GitHubApi.SLASH;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -29,7 +31,7 @@ class GitHubApiTest {
                 () -> subj.getRaw(path));
 
         String expectedMsg = String.format(GitHubApi.BadPathException.PATTERN_SLASH_START, path);
-        Assertions.assertEquals(expectedMsg, badPathException.getMessage());
+        assertEquals(expectedMsg, badPathException.getMessage());
     }
 
     @Test
@@ -39,7 +41,7 @@ class GitHubApiTest {
         GitHubApi.BadPathException badPathException = Assertions.assertThrows(GitHubApi.BadPathException.class,
                 () -> subj.getRaw(path));
 
-        Assertions.assertEquals(GitHubApi.BadPathException.MSG_EMPTY, badPathException.getMessage());
+        assertEquals(GitHubApi.BadPathException.MSG_EMPTY, badPathException.getMessage());
     }
 
     @Test
@@ -49,7 +51,7 @@ class GitHubApiTest {
         GitHubApi.BadPathException badPathException = Assertions.assertThrows(GitHubApi.BadPathException.class,
                 () -> subj.getRaw(path));
 
-        Assertions.assertEquals(GitHubApi.BadPathException.MSG_EMPTY, badPathException.getMessage());
+        assertEquals(GitHubApi.BadPathException.MSG_EMPTY, badPathException.getMessage());
     }
 
     @Test
@@ -62,7 +64,7 @@ class GitHubApiTest {
                 () -> subj.getRaw(path));
 
         String expectedMsg = String.format(PATTERN, BASE_URI + SLASH + path);
-        Assertions.assertEquals(expectedMsg, httpException.getMessage());
+        assertEquals(expectedMsg, httpException.getMessage());
     }
 
     @Test
@@ -71,8 +73,8 @@ class GitHubApiTest {
 
         HttpRequest request = subj.createRequest(path);
 
-        Assertions.assertNotNull(request);
-        Assertions.assertEquals(path, request.uri().toString());
+        assertNotNull(request);
+        assertEquals(path, request.uri().toString());
     }
 
     @Test
@@ -85,7 +87,7 @@ class GitHubApiTest {
 
         String result = subj.getRaw(path);
 
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(expectedResult, result);
+        assertNotNull(result);
+        assertEquals(expectedResult, result);
     }
 }
