@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -155,5 +156,14 @@ class BeanCreatorTest {
         assertEquals(expectedMsg, exception.getMessage());
     }
 
+    @Test
+    void createWithoutDependencies_whenDependencyIsInContext_thenReturnFromContext() throws NoSuchMethodException {
+        Date expectedDate = new Date();
+        Map<String, Object> context = new HashMap<>();
+        context.put(Date.class.getCanonicalName(), expectedDate);
+
+        Object returnedDate = subj.createWithoutDependencies(Date.class.getConstructor(), context);
+        assertSame(expectedDate, returnedDate);
+    }
 
 }

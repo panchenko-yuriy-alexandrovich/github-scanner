@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 public class GitHubService {
 
-    public static final String SEARCH_PATH = "/search/repositories?q=%s";
+    public static final String SEARCH_PATH = "search/repositories?q=%s";
     public static final String SEARCH_PATH_PAGE = SEARCH_PATH + "&page=%d";
 
     private final GitHubApi api;

@@ -57,9 +57,14 @@ public class BeanCreator {
         return result;
     }
 
-    private Object createWithoutDependencies(Constructor<?> constructor, Map<String, Object> context) {
-        Object creation = createObjectWithoutDependencies(constructor);
-        context.put(constructor.getDeclaringClass().getCanonicalName(), creation);
+    Object createWithoutDependencies(Constructor<?> constructor, Map<String, Object> context) {
+        String canonicalName = constructor.getDeclaringClass().getCanonicalName();
+        Object creation = context.get(canonicalName);
+
+        if (creation == null) {
+            creation = createObjectWithoutDependencies(constructor);
+            context.put(canonicalName, creation);
+        }
 
         return creation;
     }

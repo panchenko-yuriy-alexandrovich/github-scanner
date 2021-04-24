@@ -21,7 +21,7 @@ public class BeanFactory {
 
     @SuppressWarnings("unchecked")
     public <T> T getOrCreate(Class<T> clazz) {
-        Object singleton = context.get(clazz.getCanonicalName());
+        Object singleton = get(clazz.getCanonicalName());
         if (singleton == null) {
             singleton = beanCreator.createAndGet(clazz, context);
         }
@@ -33,6 +33,17 @@ public class BeanFactory {
         context.put(obj.getClass().getCanonicalName(), obj);
 
         return obj;
+    }
+
+    public <T> T add(String key, T obj) {
+        context.put(key, obj);
+
+        return obj;
+    }
+
+    Object get(String name) {
+
+        return context.get(name);
     }
 
 }

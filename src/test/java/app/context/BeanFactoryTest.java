@@ -58,4 +58,12 @@ class BeanFactoryTest {
         Date dateSecond = subj.getOrCreate(Date.class);
         assertSame(dateFirst, dateSecond);
     }
+
+    @Test
+    void add_whenNameIsProvided_thenSaveWithThisName() {
+        BeanFactory subj = new BeanFactory();
+        Date dateFirst = subj.add("test", new Date());
+        Date dateSecond = (Date) subj.get("test");
+        assertSame(dateFirst, dateSecond);
+    }
 }
