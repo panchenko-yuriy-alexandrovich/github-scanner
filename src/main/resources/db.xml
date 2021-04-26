@@ -14,7 +14,7 @@
 
     <changeSet id="2021-04-26 10:08 requests table" author="panchenko.yury">
         <createTable tableName="requests">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="requests_pk"/>
             </column>
             <column name="query" type="varchar(100)"><constraints nullable="false"/></column>

@@ -1,11 +1,12 @@
-package app.net;
+package app.service;
 
 import static java.lang.Math.min;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import app.model.SearchResult;
+import app.net.GitHubApi;
+import app.service.model.SearchResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package app.model;
+package app.service.model;
 
 public class SearchItem {
 

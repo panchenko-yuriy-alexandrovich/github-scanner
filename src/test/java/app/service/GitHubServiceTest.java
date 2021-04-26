@@ -1,7 +1,6 @@
-package app.net;
+package app.service;
 
-import static app.net.GitHubService.SEARCH_PATH;
-import static app.net.GitHubService.SEARCH_PATH_PAGE;
+import static app.service.GitHubService.SEARCH_PATH;
 import static java.lang.Thread.currentThread;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,14 +14,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import app.model.SearchResult;
+import app.net.GitHubApi;
+import app.service.GitHubService;
+import app.service.model.SearchResult;
 
 class GitHubServiceTest {
 

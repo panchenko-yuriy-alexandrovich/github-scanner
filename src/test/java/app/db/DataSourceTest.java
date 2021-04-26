@@ -3,29 +3,15 @@ package app.db;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class DataSourceTest {
-
-    static DbConfig dbConfig = mock(DbConfig.class);
-
-    @BeforeAll
-    static void initSystemEnvs() {
-        when(dbConfig.getUrl()).thenReturn("jdbc:h2:mem:app");
-        when(dbConfig.getUser()).thenReturn("sa");
-        when(dbConfig.getPass()).thenReturn("");
-    }
-
-    DataSource ds = new DataSource(dbConfig);
+class DataSourceTest extends DbTest {
 
     @Test
     void getConnection() throws SQLException {

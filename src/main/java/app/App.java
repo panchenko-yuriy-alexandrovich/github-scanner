@@ -3,8 +3,8 @@ package app;
 import java.net.http.HttpClient;
 
 import app.context.BeanFactory;
-import app.model.SearchResult;
-import app.net.GitHubService;
+import app.service.model.SearchResult;
+import app.service.GitHubService;
 
 public class App {
 
