@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="2021-04-26 10:07 h2-pgsql-compatibility" author="panchenko.yury" dbms="H2" runOnChange="true">
+        <sql>
+            create domain if not exists timestamptz as timestamp;
+            create alias if not exists uuid_generate_v4 for "java.util.UUID.randomUUID";
+        </sql>
+    </changeSet>
+
+    <changeSet id="2021-04-26 10:08 requests table" author="panchenko.yury">
+        <createTable tableName="requests">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="requests_pk"/>
+            </column>
+            <column name="query" type="varchar(100)"><constraints nullable="false"/></column>
+            <column name="result" type="clob"><constraints nullable="false"/></column>
+            <column name="date_created" type="timestamptz" defaultValueComputed="current_timestamp"/>
+        </createTable>
+
+        <createIndex tableName="requests" indexName="requests_query_idx" unique="true">
+            <column name="query"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="2021-04-26 10:09 test data" author="panchenko.yury" dbms="H2" runOnChange="true">
+        <sql>
+            insert into requests(query, result) values('test', 'test');
+        </sql>
+    </changeSet>
+</databaseChangeLog>
