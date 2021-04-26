@@ -19,6 +19,11 @@ public class SearchResultEntity {
         this.dateTime = dateTime;
     }
 
+    public SearchResultEntity(String query, String result) {
+        this.query = query;
+        this.result = result;
+    }
+
     public Long getId() {
         return id;
     }

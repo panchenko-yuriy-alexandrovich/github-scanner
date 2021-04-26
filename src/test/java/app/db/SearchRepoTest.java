@@ -4,7 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -17,7 +20,7 @@ import app.db.model.SearchResultEntity;
 class SearchRepoTest extends DbTest {
 
     @Test
-    void findByQuery() throws SQLException {
+    void findByQuery() {
         SearchRepo searchRepo = new SearchRepo(super.ds, new ResultSetToSearchResultEntity());
         ds.migrate();
 
@@ -28,7 +31,7 @@ class SearchRepoTest extends DbTest {
     }
 
     @Test
-    void findByQuery_whenNoDataFound_thenNullReturn() throws SQLException {
+    void findByQuery_whenNoDataFound_thenNullReturn() {
         SearchRepo searchRepo = new SearchRepo(super.ds, new ResultSetToSearchResultEntity());
         ds.migrate();
 
@@ -38,7 +41,18 @@ class SearchRepoTest extends DbTest {
     }
 
     @Test
-    void insert() throws SQLException {
+    void findByQuery_whenSQLException_thenDbExceptionThrow() throws SQLException {
+        DataSource ds = mock(DataSource.class);
+        when(ds.getConnection()).thenThrow(SQLException.class);
+        SearchRepo searchRepo = new SearchRepo(ds, new ResultSetToSearchResultEntity());
+
+        DbException dbException = assertThrows(DbException.class, () -> searchRepo.findByQuery("test"));
+
+        assertTrue(dbException.getMessage().contains("test"));
+    }
+
+    @Test
+    void insert() {
         SearchRepo searchRepo = new SearchRepo(super.ds, new ResultSetToSearchResultEntity());
         ds.migrate();
 
@@ -57,7 +71,19 @@ class SearchRepoTest extends DbTest {
     }
 
     @Test
-    void update() throws SQLException {
+    void insert_whenSQLException_thenDbExceptionThrow() throws SQLException {
+        DataSource ds = mock(DataSource.class);
+        when(ds.getConnection()).thenThrow(SQLException.class);
+        SearchRepo searchRepo = new SearchRepo(ds, new ResultSetToSearchResultEntity());
+
+        DbException dbException = assertThrows(DbException.class,
+                () -> searchRepo.save(new SearchResultEntity("test", "test")));
+
+        assertTrue(dbException.getMessage().contains("inserting"));
+    }
+
+    @Test
+    void update() {
         SearchRepo searchRepo = new SearchRepo(super.ds, new ResultSetToSearchResultEntity());
         ds.migrate();
 
@@ -78,7 +104,18 @@ class SearchRepoTest extends DbTest {
     }
 
     @Test
-    void delete() throws SQLException {
+    void update_whenSQLException_thenDbExceptionThrow() throws SQLException {
+        DataSource ds = mock(DataSource.class);
+        when(ds.getConnection()).thenThrow(SQLException.class);
+        SearchRepo searchRepo = new SearchRepo(ds, new ResultSetToSearchResultEntity());
+
+        DbException dbException = assertThrows(DbException.class, () -> searchRepo.update(new SearchResultEntity()));
+
+        assertTrue(dbException.getMessage().contains("updating"));
+    }
+
+    @Test
+    void delete() {
         SearchRepo searchRepo = new SearchRepo(super.ds, new ResultSetToSearchResultEntity());
         ds.migrate();
 
@@ -92,5 +129,16 @@ class SearchRepoTest extends DbTest {
         SearchResultEntity afterDeletion = searchRepo.findByQuery("test");
 
         assertNull(afterDeletion);
+    }
+
+    @Test
+    void delete_whenSQLException_thenDbExceptionThrow() throws SQLException {
+        DataSource ds = mock(DataSource.class);
+        when(ds.getConnection()).thenThrow(SQLException.class);
+        SearchRepo searchRepo = new SearchRepo(ds, new ResultSetToSearchResultEntity());
+
+        DbException dbException = assertThrows(DbException.class, () -> searchRepo.delete(new SearchResultEntity()));
+
+        assertTrue(dbException.getMessage().contains("deleting"));
     }
 }

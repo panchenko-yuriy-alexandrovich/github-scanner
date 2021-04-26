@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import app.net.GitHubApi;
-import app.service.GitHubService;
 import app.service.model.SearchResult;
 
 class GitHubServiceTest {
@@ -59,10 +58,10 @@ class GitHubServiceTest {
 
         when(api.getRaw(any())).thenReturn(msg);
 
-        GitHubService.ParseException parseException =
-                assertThrows(GitHubService.ParseException.class, () -> gitHubService.search("test"));
+        ParseException parseException =
+                assertThrows(ParseException.class, () -> gitHubService.search("test"));
 
-        String expMsg = String.format(GitHubService.ParseException.PATTERN, msg, SearchResult.class.getCanonicalName());
+        String expMsg = String.format(ParseException.PATTERN, msg, SearchResult.class.getCanonicalName());
 
         assertEquals(expMsg, parseException.getMessage());
     }
