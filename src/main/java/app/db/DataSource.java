@@ -38,23 +38,12 @@ public class DataSource {
     }
 
     void migrate(String fileName, String context) {
-        Connection conn = null;
-        try {
-            conn = getConnection();
+        try (Connection conn = getConnection()) {
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(conn));
             Liquibase liquibase = new Liquibase(fileName, new ClassLoaderResourceAccessor(), database);
             liquibase.update(context);
         } catch (SQLException | LiquibaseException e) {
             throw new DbException("Error on migrating Liquibase: " + e.getMessage(), e);
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                    conn.close();
-                } catch (SQLException e) {
-                    //nothing to do
-                }
-            }
         }
     }
 

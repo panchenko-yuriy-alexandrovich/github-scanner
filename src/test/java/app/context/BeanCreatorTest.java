@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class BeanCreatorTest {
@@ -162,7 +161,7 @@ class BeanCreatorTest {
         Map<String, Object> context = new HashMap<>();
         context.put(Date.class.getCanonicalName(), expectedDate);
 
-        Object returnedDate = subj.createWithoutDependencies(Date.class.getConstructor(), context);
+        Object returnedDate = subj.getOrCreateWithoutDependencies(Date.class.getConstructor(), context);
         assertSame(expectedDate, returnedDate);
     }
 

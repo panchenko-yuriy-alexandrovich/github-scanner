@@ -23,8 +23,8 @@ public class BeanCreator {
                                                                         .findFirst();
 
         return constructorWithoutDependencies.isPresent() ?
-                createWithoutDependencies(constructorWithoutDependencies.get(), context) :
-                createWithDependencies(clazz, context, alreadyFoundBeans);
+                getOrCreateWithoutDependencies(constructorWithoutDependencies.get(), context) :
+                getOrCreateWithDependencies(clazz, context, alreadyFoundBeans);
     }
 
     Object createObjectWithoutDependencies(Constructor<?> constructor) {
@@ -57,7 +57,7 @@ public class BeanCreator {
         return result;
     }
 
-    Object createWithoutDependencies(Constructor<?> constructor, Map<String, Object> context) {
+    Object getOrCreateWithoutDependencies(Constructor<?> constructor, Map<String, Object> context) {
         String canonicalName = constructor.getDeclaringClass().getCanonicalName();
         Object creation = context.get(canonicalName);
 
@@ -69,10 +69,11 @@ public class BeanCreator {
         return creation;
     }
 
-    private Object createWithDependencies(Class<?> clazz, Map<String, Object> context, Set<String> alreadyFoundBeans) {
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    private Object getOrCreateWithDependencies(Class<?> clazz, Map<String, Object> context, Set<String> alreadyFoundBeans) {
         Constructor<?> constructor = Arrays.stream(clazz.getDeclaredConstructors()).findFirst().get();
         String className = constructor.getDeclaringClass().getCanonicalName();
-        if (alreadyFoundBeans.contains(className)) { //TODO construct a tree of all dependencies and analyze
+        if (alreadyFoundBeans.contains(className)) {
             throw new CreationBeanLoopException(String.format(CreationBeanLoopException.PATTERN, className));
         }
         alreadyFoundBeans.add(className);
