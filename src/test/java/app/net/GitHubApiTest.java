@@ -5,6 +5,7 @@ import static app.net.GitHubApi.HttpException.PATTERN;
 import static app.net.GitHubApi.SLASH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -15,7 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class GitHubApiTest {
@@ -27,7 +27,7 @@ class GitHubApiTest {
     void getRaw_whenPathStartsWithSlash_thenThrowException() {
         String path = "/test";
 
-        GitHubApi.BadPathException badPathException = Assertions.assertThrows(GitHubApi.BadPathException.class,
+        GitHubApi.BadPathException badPathException = assertThrows(GitHubApi.BadPathException.class,
                 () -> subj.getRaw(path));
 
         String expectedMsg = String.format(GitHubApi.BadPathException.PATTERN_SLASH_START, path);
@@ -38,7 +38,7 @@ class GitHubApiTest {
     void getRaw_whenPathIsNull_thenThrowException() {
         String path = null;
 
-        GitHubApi.BadPathException badPathException = Assertions.assertThrows(GitHubApi.BadPathException.class,
+        GitHubApi.BadPathException badPathException = assertThrows(GitHubApi.BadPathException.class,
                 () -> subj.getRaw(path));
 
         assertEquals(GitHubApi.BadPathException.MSG_EMPTY, badPathException.getMessage());
@@ -48,7 +48,7 @@ class GitHubApiTest {
     void getRaw_whenPathIsEmpty_thenThrowException() {
         String path = "";
 
-        GitHubApi.BadPathException badPathException = Assertions.assertThrows(GitHubApi.BadPathException.class,
+        GitHubApi.BadPathException badPathException = assertThrows(GitHubApi.BadPathException.class,
                 () -> subj.getRaw(path));
 
         assertEquals(GitHubApi.BadPathException.MSG_EMPTY, badPathException.getMessage());
@@ -60,7 +60,7 @@ class GitHubApiTest {
 
         when(mockHttpClient.send(any(), any())).thenThrow(new InterruptedException("testException"));
 
-        GitHubApi.HttpException httpException = Assertions.assertThrows(GitHubApi.HttpException.class,
+        GitHubApi.HttpException httpException = assertThrows(GitHubApi.HttpException.class,
                 () -> subj.getRaw(path));
 
         String expectedMsg = String.format(PATTERN, BASE_URI + SLASH + path);
