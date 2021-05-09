@@ -10,13 +10,15 @@ RUN ./mvnw --version
 COPY . ./
 RUN ./mvnw clean package -DskipTests
 
-FROM bellsoft/liberica-openjre-alpine:11 as final
+FROM bellsoft/liberica-openjdk-alpine:11 as final
 RUN adduser -S user
 
 WORKDIR /app
 
-COPY --from=server-build /app/target/libs ./
+COPY --from=server-build /app/target/libs libs/
 COPY --from=server-build /app/target/app.jar ./
+
+RUN mkdir tmp; chown -R user tmp
 
 USER user
 
