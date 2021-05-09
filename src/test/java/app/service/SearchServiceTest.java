@@ -1,7 +1,6 @@
 package app.service;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptySet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -10,6 +9,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,10 +49,10 @@ class SearchServiceTest {
 
         assertNotNull(searchResponse);
         assertNotNull(searchResponse.getCurrentDate());
-        assertEquals(42, searchResponse.getCurrentSearch().getTotalCount());
+        assertEquals(0, searchResponse.getCurrentSearch().getTotalCount());
         assertNull(searchResponse.getPreviousSearch());
         assertNull(searchResponse.getPreviousDate());
-        assertEquals(42, searchResponse.getDiff().getCountDiff());
+        assertEquals(0, searchResponse.getDiff().getCountDiff());
 
         verify(searchRepo, times(1)).save(any(SearchResultEntity.class));
     }
@@ -66,7 +68,7 @@ class SearchServiceTest {
 
         SearchResult resultPrev = new SearchResult();
         resultPrev.setTotalCount(3);
-        resultPrev.setNames(emptySet());
+        resultPrev.setNames(new HashSet<>(Arrays.asList("1", "2", "3")));
         when(searchResultParser.read(any(), any())).thenReturn(resultPrev);
         when(searchResultParser.write(any())).thenReturn("test");
 
@@ -75,9 +77,9 @@ class SearchServiceTest {
         assertNotNull(searchResponse);
         assertNotNull(searchResponse.getPreviousSearch());
         assertNotNull(searchResponse.getCurrentDate());
-        assertEquals(42, searchResponse.getCurrentSearch().getTotalCount());
+        assertEquals(0, searchResponse.getCurrentSearch().getTotalCount());
         assertEquals(3, searchResponse.getPreviousSearch().getTotalCount());
-        assertEquals(42 - 3, searchResponse.getDiff().getCountDiff());
+        assertEquals(3, searchResponse.getDiff().getCountDiff());
 
         verify(searchRepo, times(1)).update(any(SearchResultEntity.class));
     }

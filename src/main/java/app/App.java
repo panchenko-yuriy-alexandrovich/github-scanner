@@ -22,7 +22,7 @@ public class App extends Jooby {
 
     {
         get("/api/health", ctx -> "{\"status\":\"UP\"}");
-        get("/api/search/{name}", ctx -> context.getOrCreate(SearchHandler.class).apply(ctx));
+        post("/api/search", ctx -> context.getOrCreate(SearchHandler.class).apply(ctx));
     }
 
     public static void main(String[] args) {

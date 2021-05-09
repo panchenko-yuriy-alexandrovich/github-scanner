@@ -1,5 +1,6 @@
 package app.converter;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import app.service.model.SearchGitHubResult;
@@ -11,7 +12,8 @@ public class SearchGitHubResultToSearchResult implements Converter<SearchGitHubR
     @Override
     public SearchResult convert(SearchGitHubResult from) {
 
-        return new SearchResult(from.getTotalCount(),
-                from.getItems().stream().map(SearchItem::getFullName).collect(Collectors.toSet()));
+        Set<String> names = from.getItems().stream().map(SearchItem::getFullName).collect(Collectors.toSet());
+
+        return new SearchResult(names.size(), names);
     }
 }
