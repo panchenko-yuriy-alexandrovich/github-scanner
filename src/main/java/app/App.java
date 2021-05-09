@@ -7,6 +7,7 @@ import app.db.DataSource;
 import app.handler.SearchHandler;
 import app.service.StringUtils;
 import io.jooby.Jooby;
+import io.jooby.MediaType;
 import io.jooby.ServerOptions;
 
 public class App extends Jooby {
@@ -21,6 +22,7 @@ public class App extends Jooby {
     }
 
     {
+        before(ctx -> ctx.setResponseType(MediaType.JSON));
         get("/api/health", ctx -> "{\"status\":\"UP\"}");
         post("/api/search", ctx -> context.getOrCreate(SearchHandler.class).apply(ctx));
     }
