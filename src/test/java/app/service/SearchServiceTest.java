@@ -1,6 +1,7 @@
 package app.service;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -12,9 +13,11 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 
+import app.converter.SearchGitHubResultToSearchResult;
 import app.db.SearchRepo;
 import app.db.model.SearchResultEntity;
 import app.parse.SearchResultParser;
+import app.service.model.SearchGitHubResult;
 import app.service.model.SearchResponse;
 import app.service.model.SearchResult;
 
@@ -24,14 +27,15 @@ class SearchServiceTest {
     SearchRepo searchRepo = mock(SearchRepo.class);
     SearchResultParser searchResultParser = mock(SearchResultParser.class);
     DiffService diffService = new DiffService();
+    SearchGitHubResultToSearchResult searchGitHubResultToSearchResult = new SearchGitHubResultToSearchResult();
 
-    SearchService subj = new SearchService(gitHubService, searchRepo, searchResultParser, diffService);
+    SearchService subj = new SearchService(gitHubService, searchRepo, searchResultParser, diffService, searchGitHubResultToSearchResult);
 
     @Test
     void search_whenRepoReturnNull_thenSaveIsCalled() {
         when(searchRepo.findByQuery(any(String.class))).thenReturn(null);
 
-        SearchResult result = new SearchResult();
+        SearchGitHubResult result = new SearchGitHubResult();
         result.setTotalCount(42);
         result.setItems(emptyList());
         when(gitHubService.search(any(String.class))).thenReturn(result);
@@ -55,15 +59,15 @@ class SearchServiceTest {
     void search_whenRepoReturnNotNull_thenUpdateIsCalled() {
         when(searchRepo.findByQuery(any(String.class))).thenReturn(new SearchResultEntity());
 
-        SearchResult result = new SearchResult();
+        SearchGitHubResult result = new SearchGitHubResult();
         result.setTotalCount(42);
         result.setItems(emptyList());
         when(gitHubService.search(any())).thenReturn(result);
 
         SearchResult resultPrev = new SearchResult();
         resultPrev.setTotalCount(3);
-        resultPrev.setItems(emptyList());
-        when(searchResultParser.read(any())).thenReturn(resultPrev);
+        resultPrev.setNames(emptySet());
+        when(searchResultParser.read(any(), any())).thenReturn(resultPrev);
         when(searchResultParser.write(any())).thenReturn("test");
 
         SearchResponse searchResponse = subj.search("test");

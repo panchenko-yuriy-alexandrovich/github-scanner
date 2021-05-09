@@ -14,7 +14,6 @@ services:
     restart: always
     image: postgres:13-alpine
     volumes:
-      - ./test/db/postgres-init:/docker-entrypoint-initdb.d
       - data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: app

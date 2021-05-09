@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 
 import org.junit.jupiter.api.Test;
 
 import app.service.model.Difference;
-import app.service.model.SearchItem;
 import app.service.model.SearchResult;
 
 class DiffServiceTest {
@@ -21,9 +21,7 @@ class DiffServiceTest {
     void create_whenPrevIsNull_thenAllDataFromCurrent() {
         SearchResult current = new SearchResult();
         current.setTotalCount(42);
-        SearchItem item = new SearchItem();
-        item.setFullName("Galaxy");
-        current.setItems(Collections.singletonList(item));
+        current.setNames(Collections.singleton("Galaxy"));
 
         Difference difference = subj.create(null, current);
 
@@ -43,15 +41,8 @@ class DiffServiceTest {
         current.setTotalCount(42);
         prev.setTotalCount(3);
 
-        SearchItem item = new SearchItem();
-        item.setFullName("Galaxy");
-        SearchItem itemDeleted = new SearchItem();
-        itemDeleted.setFullName("Del");
-        SearchItem itemNew = new SearchItem();
-        itemNew.setFullName("Test");
-
-        current.setItems(Arrays.asList(itemNew, item));
-        prev.setItems(Arrays.asList(itemDeleted, item));
+        current.setNames(new HashSet<>(Arrays.asList("Test", "Galaxy")));
+        prev.setNames(new HashSet<>(Arrays.asList("Del", "Galaxy")));
 
         Difference difference = subj.create(prev, current);
 
@@ -60,7 +51,7 @@ class DiffServiceTest {
         assertNotNull(difference.getDeletedFromLastSearch());
         assertEquals(1, difference.getDeletedFromLastSearch().size());
         assertEquals(1, difference.getAddedFromLastSearch().size());
-        assertTrue(difference.getAddedFromLastSearch().contains(itemNew.getFullName()));
-        assertTrue(difference.getDeletedFromLastSearch().contains(itemDeleted.getFullName()));
+        assertTrue(difference.getAddedFromLastSearch().contains("Test"));
+        assertTrue(difference.getDeletedFromLastSearch().contains("Del"));
     }
 }

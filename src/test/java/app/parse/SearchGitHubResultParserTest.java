@@ -1,5 +1,6 @@
 package app.parse;
 
+import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,14 +12,18 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.junit.jupiter.api.Test;
 
 import app.service.ParseException;
-import app.service.model.SearchResult;
+import app.service.model.SearchResponse;
+import app.service.model.SearchGitHubResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-class SearchResultParserTest {
+class SearchGitHubResultParserTest {
 
     ObjectMapper objectMapper = mock(ObjectMapper.class);
     SearchResultParser subj = new SearchResultParser(objectMapper);
@@ -26,7 +31,7 @@ class SearchResultParserTest {
     @Test
     void read() {
         SearchResultParser subj = new SearchResultParser();
-        SearchResult searchResult = subj.read("{\"totalCount\":0,\"items\":[]}");
+        SearchGitHubResult searchResult = subj.read("{\"totalCount\":0,\"items\":[]}", SearchGitHubResult.class);
 
         assertEquals(0, searchResult.getTotalCount());
         assertNotNull(searchResult.getItems());
@@ -38,15 +43,15 @@ class SearchResultParserTest {
         when(objectMapper.readValue(any(String.class), any(Class.class))).thenThrow(JsonProcessingException.class);
 
         Throwable exception = assertThrows(ParseException.class,
-                () -> subj.read("test"));
+                () -> subj.read("test", SearchGitHubResult.class));
 
         assertTrue(exception.getMessage().contains("test"));
-        verify(objectMapper, times(1)).readValue("test", SearchResult.class);
+        verify(objectMapper, times(1)).readValue("test", SearchGitHubResult.class);
     }
 
     @Test
     void write() {
-        SearchResult objectToWrite = new SearchResult();
+        SearchGitHubResult objectToWrite = new SearchGitHubResult();
         objectToWrite.setTotalCount(0);
         objectToWrite.setItems(emptyList());
 
@@ -62,11 +67,22 @@ class SearchResultParserTest {
         when(objectMapper.writeValueAsString(any())).thenThrow(JsonProcessingException.class);
 
 
-        SearchResult objectToWrite = new SearchResult();
+        SearchGitHubResult objectToWrite = new SearchGitHubResult();
         Throwable exception = assertThrows(ParseException.class,
                 () -> subj.write(objectToWrite));
 
         assertTrue(exception.getMessage().contains("parsing SearchResult to string"));
         verify(objectMapper, times(1)).writeValueAsString(objectToWrite);
+    }
+
+    @Test
+    void write_withJava8Dates() {
+        SearchResultParser subj = new SearchResultParser();
+
+        LocalDateTime now = now();
+        SearchResponse resp = new SearchResponse(null, now, null, null, null);
+
+        String str = subj.write(resp);
+        assertTrue(str.contains(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))));
     }
 }

@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import app.net.GitHubApi;
-import app.service.model.SearchResult;
+import app.service.model.SearchGitHubResult;
 
 class GitHubServiceTest {
 
@@ -43,7 +43,7 @@ class GitHubServiceTest {
         String query = "selenide";
         String realProject = "selenide/selenide";
 
-        SearchResult result = gitHubService.search(query);
+        SearchGitHubResult result = gitHubService.search(query);
 
         assertNotNull(result);
         assertEquals(1681, result.getTotalCount());
@@ -61,7 +61,7 @@ class GitHubServiceTest {
         ParseException parseException =
                 assertThrows(ParseException.class, () -> gitHubService.search("test"));
 
-        String expMsg = String.format(ParseException.PATTERN, msg, SearchResult.class.getCanonicalName());
+        String expMsg = String.format(ParseException.PATTERN, msg, SearchGitHubResult.class.getCanonicalName());
 
         assertEquals(expMsg, parseException.getMessage());
     }

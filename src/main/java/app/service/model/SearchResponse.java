@@ -37,5 +37,4 @@ public class SearchResponse {
     public Difference getDiff() {
         return diff;
     }
-
 }

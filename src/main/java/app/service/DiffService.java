@@ -7,15 +7,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import app.service.model.Difference;
-import app.service.model.SearchItem;
 import app.service.model.SearchResult;
 
 public class DiffService {
 
     public Difference create(SearchResult previousSearch, SearchResult currentSearch) {
         Difference difference = new Difference();
-        Set<String> currentProjects =
-                currentSearch.getItems().stream().map(SearchItem::getFullName).collect(Collectors.toSet());
+        Set<String> currentProjects = currentSearch.getNames();
 
         if (previousSearch == null) {
             difference.setCountDiff(currentSearch.getTotalCount());
@@ -23,8 +21,7 @@ public class DiffService {
             difference.setAddedFromLastSearch(currentProjects);
         } else {
             difference.setCountDiff(Math.abs(previousSearch.getTotalCount() - currentSearch.getTotalCount()));
-            Set<String> preciousProjects =
-                    previousSearch.getItems().stream().map(SearchItem::getFullName).collect(Collectors.toSet());
+            Set<String> preciousProjects = previousSearch.getNames();
 
 
             difference.setDeletedFromLastSearch(

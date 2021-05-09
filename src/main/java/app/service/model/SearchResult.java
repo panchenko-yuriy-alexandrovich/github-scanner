@@ -1,12 +1,20 @@
 package app.service.model;
 
-import java.util.List;
+import java.util.Set;
 
 public class SearchResult {
 
     private int totalCount;
 
-    private List<SearchItem> items;
+    private Set<String> names;
+
+    public SearchResult() {
+    }
+
+    public SearchResult(int totalCount, Set<String> names) {
+        this.totalCount = totalCount;
+        this.names = names;
+    }
 
     public int getTotalCount() {
         return totalCount;
@@ -16,11 +24,11 @@ public class SearchResult {
         this.totalCount = totalCount;
     }
 
-    public List<SearchItem> getItems() {
-        return items;
+    public Set<String> getNames() {
+        return names;
     }
 
-    public void setItems(List<SearchItem> items) {
-        this.items = items;
+    public void setNames(Set<String> names) {
+        this.names = names;
     }
 }

@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 
 import app.net.GitHubApi;
 import app.parse.SearchResultParser;
-import app.service.model.SearchResult;
+import app.service.model.SearchGitHubResult;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -25,16 +25,16 @@ public class GitHubService {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false));
     }
 
-    public SearchResult search(String query) {
+    public SearchGitHubResult search(String query) {
 
         return search(query, null);
     }
 
-    public SearchResult search(String query, Integer page) {
+    public SearchGitHubResult search(String query, Integer page) {
         String path = getPath(query, page);
         String raw = api.getRaw(path);
 
-        return searchResultParser.read(raw);
+        return searchResultParser.read(raw, SearchGitHubResult.class);
     }
 
     String getPath(String query, Integer page) {
