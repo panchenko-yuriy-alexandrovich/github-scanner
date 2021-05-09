@@ -7,6 +7,9 @@ COPY mvnw ./
 COPY .mvn .mvn/
 RUN ./mvnw --version
 
+COPY pom.xml ./
+RUN ./mvnw clean package --fail-never
+
 COPY . ./
 RUN ./mvnw clean package -DskipTests
 

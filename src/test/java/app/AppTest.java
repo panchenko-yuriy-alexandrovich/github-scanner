@@ -14,7 +14,7 @@ class AppTest {
 
         String expectedResult = "{\"status\":\"UP\"}";
 
-        assertEquals(expectedResult, router.get("/health").value());
+        assertEquals(expectedResult, router.get("/api/health").value());
     }
 
 }
