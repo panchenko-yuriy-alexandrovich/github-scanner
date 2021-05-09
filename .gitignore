@@ -1,6 +1,7 @@
 *.iml
 .idea
 target
+test
 tmp
 # Compiled class file
 *.class

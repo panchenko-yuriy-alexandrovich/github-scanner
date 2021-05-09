@@ -4,16 +4,19 @@ import java.net.http.HttpClient;
 
 import app.context.BeanFactory;
 import app.db.DataSource;
+import app.service.StringUtils;
 import io.jooby.Jooby;
 import io.jooby.ServerOptions;
 
 public class App extends Jooby {
 
-    static BeanFactory context;
+    static BeanFactory context = new BeanFactory();
+
+    static StringUtils stringUtils = context.getOrCreate(StringUtils.class);
 
     {
         String portEnv = System.getenv("PORT");
-        int port = portEnv == null || portEnv.isEmpty() ? 8080 : Integer.parseInt(portEnv);
+        int port = stringUtils.isEmpty(portEnv) ? 8080 : Integer.parseInt(portEnv);
 
         setServerOptions(new ServerOptions().setPort(port));
     }
@@ -23,7 +26,6 @@ public class App extends Jooby {
     }
 
     public static void main(String[] args) {
-        context = new BeanFactory();
         context.add(HttpClient.class.getCanonicalName(), HttpClient.newHttpClient());
         DataSource dataSource = context.getOrCreate(DataSource.class);
         dataSource.migrate();
