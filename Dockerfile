@@ -13,7 +13,7 @@ RUN ./mvnw clean package --fail-never
 COPY . ./
 RUN ./mvnw clean package -DskipTests
 
-FROM bellsoft/liberica-openjdk-alpine:11 as final
+FROM bellsoft/liberica-openjre-alpine:11 as final
 RUN adduser -S user
 
 WORKDIR /app

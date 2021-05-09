@@ -8,9 +8,11 @@ import static uk.org.webcompere.systemstubs.SystemStubs.withEnvironmentVariable;
 
 import org.junit.jupiter.api.Test;
 
+import app.service.StringUtils;
+
 class DbConfigTest {
 
-    final DbConfig dbConfig = new DbConfig();
+    final DbConfig dbConfig = new DbConfig(new StringUtils());
 
     @Test
     void getUrl() throws Exception {
@@ -18,6 +20,12 @@ class DbConfigTest {
 
         withEnvironmentVariable(URL, expectedUrl)
                 .execute(() -> assertEquals(expectedUrl, dbConfig.getUrl()));
+    }
+
+    @Test
+    void getUrl_whenEnvIsEmpty_theReturnLocal() {
+
+        assertEquals("jdbc:postgresql://127.0.0.1:6432/app", dbConfig.getUrl());
     }
 
     @Test
@@ -29,10 +37,22 @@ class DbConfigTest {
     }
 
     @Test
+    void getUser_whenEnvIsEmpty_theReturnDbName() {
+
+        assertEquals(DbConfig.DB_NAME, dbConfig.getUser());
+    }
+
+    @Test
     void getPass() throws Exception {
         String expectedPass = "pass";
 
         withEnvironmentVariable(PASS, expectedPass)
                 .execute(() -> assertEquals(expectedPass, dbConfig.getPass()));
+    }
+
+    @Test
+    void getPass_whenEnvIsEmpty_theReturnDbName() {
+
+        assertEquals(DbConfig.DB_NAME, dbConfig.getPass());
     }
 }

@@ -3,6 +3,7 @@ package app;
 import java.net.http.HttpClient;
 
 import app.context.BeanFactory;
+import app.db.DataSource;
 import io.jooby.Jooby;
 import io.jooby.ServerOptions;
 
@@ -24,6 +25,8 @@ public class App extends Jooby {
     public static void main(String[] args) {
         context = new BeanFactory();
         context.add(HttpClient.class.getCanonicalName(), HttpClient.newHttpClient());
+        DataSource dataSource = context.getOrCreate(DataSource.class);
+        dataSource.migrate();
 
         runApp(args, App::new);
     }
