@@ -1,7 +1,8 @@
 # github-scanner
-scan github for repositories with speciifc names
-the API is scanning GihHub with GitHub API calculate unique repo names
-and returning current search and previous one with calculated difference.
+scan github for repositories with speciifc names.
+
+This API is scanning GihHub with GitHub API, calculates unique repo names
+and is returning current search and previous one with calculated difference.
 
 - Server API is using Jooby
 - DB is Postgres
