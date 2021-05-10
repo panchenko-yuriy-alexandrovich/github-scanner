@@ -33,11 +33,10 @@ pipeline {
         branch 'main'
       }
       steps {
-        sh "docker-compose -f docker-compose.yml -f docker-compose.override.yml -p ${APP} up -d --remove-orphans"
-        script {
-          def startLogs = sh script: "sleep 5 && docker logs ${APP}_${APP}_1 | grep -B50 -A1 'listening on:'", returnStdout: true
-          println(startLogs)
-        }
+        sh "docker tag ${APP}_${APP} registry.heroku.com/github-scanner/web"
+        sh "docker login --username=${HEROKU_USER} --password=${HEROKU_KEY} registry.heroku.com"
+        sh "docker image push registry.heroku.com/github-scanner/web:latest"
+        sh "./heroku-container-release.sh"
       }
     }
 

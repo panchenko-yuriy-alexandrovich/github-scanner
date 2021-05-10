@@ -1,5 +1,6 @@
 package app.db;
 
+import static app.db.DbConfig.DATABASE_URL;
 import static app.db.DbConfig.PASS;
 import static app.db.DbConfig.URL;
 import static app.db.DbConfig.USER;
@@ -23,6 +24,14 @@ class DbConfigTest {
     }
 
     @Test
+    void getUrl_withDATABASE_URL() throws Exception {
+        String herokuUrl = "postgres://user:pass@host:port/db";
+
+        withEnvironmentVariable(DATABASE_URL, herokuUrl)
+                .execute(() -> assertEquals("jdbc:postgresql://host:port/db", dbConfig.getUrl()));
+    }
+
+    @Test
     void getUrl_whenEnvIsEmpty_theReturnLocal() {
 
         assertEquals("jdbc:postgresql://127.0.0.1:6432/app", dbConfig.getUrl());
@@ -37,6 +46,14 @@ class DbConfigTest {
     }
 
     @Test
+    void getUser_withDATABASE_URL() throws Exception {
+        String herokuUrl = "postgres://user:pass@host:port/db";
+
+        withEnvironmentVariable(DATABASE_URL, herokuUrl)
+                .execute(() -> assertEquals("user", dbConfig.getUser()));
+    }
+
+    @Test
     void getUser_whenEnvIsEmpty_theReturnDbName() {
 
         assertEquals(DbConfig.DB_NAME, dbConfig.getUser());
@@ -48,6 +65,14 @@ class DbConfigTest {
 
         withEnvironmentVariable(PASS, expectedPass)
                 .execute(() -> assertEquals(expectedPass, dbConfig.getPass()));
+    }
+
+    @Test
+    void getPass_withDATABASE_URL() throws Exception {
+        String herokuUrl = "postgres://user:pass@host:port/db";
+
+        withEnvironmentVariable(DATABASE_URL, herokuUrl)
+                .execute(() -> assertEquals("pass", dbConfig.getPass()));
     }
 
     @Test

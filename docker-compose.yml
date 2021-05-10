@@ -5,9 +5,9 @@ services:
     restart: always
     build: .
     environment:
-      - DB_URL=jdbc:postgresql://db:5432/app
-      - DB_USER=app
-      - DB_PASS=app
+      - JDBC_DATABASE_URL=jdbc:postgresql://db:5432/app
+      - JDBC_DATABASE_USERNAME=app
+      - JDBC_DATABASE_PASSWORD=app
     depends_on:
       - db
   db:

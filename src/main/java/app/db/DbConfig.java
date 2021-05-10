@@ -5,9 +5,10 @@ import app.service.StringUtils;
 
 public class DbConfig {
 
-    public static final String URL = "DB_URL";
-    public static final String USER = "DB_USER";
-    public static final String PASS = "DB_PASS";
+    public static final String URL = "JDBC_DATABASE_URL";
+    public static final String USER = "JDBC_DATABASE_USERNAME";
+    public static final String PASS = "JDBC_DATABASE_PASSWORD";
+    public static final String DATABASE_URL = "DATABASE_URL";
 
     public static final String DB_NAME = "app";
 
@@ -18,20 +19,32 @@ public class DbConfig {
     }
 
     public String getUrl() {
-        String jdbcUrl = System.getenv(URL);
+        String dbUrl = System.getenv(DATABASE_URL);
 
-        return stringUtils.isEmpty(jdbcUrl) ? "jdbc:postgresql://127.0.0.1:6432/app" : jdbcUrl;
+        if (stringUtils.isEmpty(dbUrl)) {
+            String jdbcUrl = System.getenv(URL);
+
+            return stringUtils.isEmpty(jdbcUrl) ? "jdbc:postgresql://127.0.0.1:6432/app" : jdbcUrl;
+        } else {
+            String[] dbParams = dbUrl.split(":");
+
+            return "jdbc:postgresql://" + dbParams[2].split("@")[1] + ":" + dbParams[3];
+        }
     }
 
     public String getUser() {
-        String user = System.getenv(USER);
+        String dbUrl = System.getenv(DATABASE_URL);
 
-        return stringUtils.isEmpty(user) ? DB_NAME : user;
+        return stringUtils.isEmpty(dbUrl) ?
+                (stringUtils.isEmpty(System.getenv(USER)) ? DB_NAME : System.getenv(USER)) :
+                dbUrl.split(":")[1].substring(2);
     }
 
     public String getPass() {
-        String pass = System.getenv(PASS);
+        String dbUrl = System.getenv(DATABASE_URL);
 
-        return stringUtils.isEmpty(pass) ? DB_NAME : pass;
+        return stringUtils.isEmpty(dbUrl) ?
+                (stringUtils.isEmpty(System.getenv(PASS)) ? DB_NAME : System.getenv(PASS)) :
+                dbUrl.split(":")[2].split("@")[0];
     }
 }

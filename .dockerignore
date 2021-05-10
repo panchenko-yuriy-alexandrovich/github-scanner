@@ -5,3 +5,4 @@
 /DockerFile
 /docker-compose*
 /README.*
+/heroku-container-release.*
