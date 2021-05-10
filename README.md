@@ -19,25 +19,26 @@ This repo was inspired by Jpoint 2021 [Andrei Solntsev](https://github.com/asoln
 I have tried to follow their steps and create a working tested product.
 It was an interesting journey for Mays vacation.
 
-#Noteworthy features:
+# Noteworthy features:
 - Custom dependency injection
 - Efficient [Docker](https://github.com/panchenko-yuriy-alexandrovich/github-scanner/blob/main/Dockerfile) usage (cached layers in order of less frequent changes), maven downloads dependencies once
 
-#Running in Docker
+# Running in Docker
 
 docker-compose up --build
 
 or to just start the DB: docker-compose up -d db
 
 This will bind to 127.0.0.1:6432 by default
-#Development
+
+# Development
 After clone:
 
 To run - ./mvnw clean compile exec:java
 
 To test - ./mvnw test
 
-#Deployment
+# Deployment
 - [Jenkinsfile](https://github.com/panchenko-yuriy-alexandrovich/github-scanner/blob/main/Jenkinsfile) is used to deploy to Heroku
 - Env-specific configuration is provided using env vars (docker-compose.yml files or Heroku)
 - All env vars are optional, so that everything would run out of the box in development
