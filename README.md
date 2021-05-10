@@ -10,12 +10,17 @@ and returning current search and previous one with calculated difference.
 - H2 is for DB integration tests
 - system-stubs-jupiter for ENV tests
 
-This repo was inspired by Jpoint2021 Andrew Solntsev and Anton Keks presentation.
+This app is running inside [Heroku](https://github-scanner.herokuapp.com/api/health) 
+
+Some test collections you could find in [postman-collection](https://github.com/panchenko-yuriy-alexandrovich/github-scanner/blob/main/tests.postman_collection.json")
+
+This repo was inspired by Jpoint 2021 [Andrei Solntsev](https://github.com/asolntsev) and [Anton Keks](https://github.com/angryziber) [presentation](https://github.com/angryziber/jpoint-pairing-2021)
 I have tried to follow their steps and create a working tested product.
+It was an interesting journey for Mays vacation.
 
 #Noteworthy features:
 - Custom dependency injection
-- Efficient Docker usage (cached layers in order of less frequent changes), maven downloads dependencies once
+- Efficient [Docker](https://github.com/panchenko-yuriy-alexandrovich/github-scanner/blob/main/Dockerfile) usage (cached layers in order of less frequent changes), maven downloads dependencies once
 
 #Running in Docker
 
@@ -32,6 +37,6 @@ To run - ./mvnw clean compile exec:java
 To test - ./mvnw test
 
 #Deployment
-- Jenkinsfile is used to deploy to Heroku
+- [Jenkinsfile](https://github.com/panchenko-yuriy-alexandrovich/github-scanner/blob/main/Jenkinsfile) is used to deploy to Heroku
 - Env-specific configuration is provided using env vars (docker-compose.yml files or Heroku)
 - All env vars are optional, so that everything would run out of the box in development
