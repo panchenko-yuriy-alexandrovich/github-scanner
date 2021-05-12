@@ -1,5 +1,5 @@
 # github-scanner
-scan github for repositories with speciifc names.
+Scan github for repositories with specific names.
 
 This API is scanning GihHub with GitHub API, calculates unique repo names
 and is returning current search and previous one with calculated difference.
@@ -13,7 +13,7 @@ and is returning current search and previous one with calculated difference.
 
 This app is running inside [Heroku](https://github-scanner.herokuapp.com/api/health) 
 
-Some test collections you could find in [postman-collection](https://github.com/panchenko-yuriy-alexandrovich/github-scanner/blob/main/tests.postman_collection.json")
+Some test collections you could find in [postman-collection](https://github.com/panchenko-yuriy-alexandrovich/github-scanner/blob/main/tests.postman_collection.json)
 
 This repo was inspired by Jpoint 2021 [Andrei Solntsev](https://github.com/asolntsev) and [Anton Keks](https://github.com/angryziber) [presentation](https://github.com/angryziber/jpoint-pairing-2021)
 I have tried to follow their steps and create a working tested product.
